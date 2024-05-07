@@ -29,15 +29,7 @@ logo = Image.open(logo)
 st.header("kimathi-grading.")
 st.image(logo, use_column_width=True)
 
-task = st.selectbox("What do you wanna do?", ("Estimate my score.", "Set target(s)."))
-st.write(" ")
-st.selectbox("Which school are you in?", ("Engineering", "Computer Science and Information Technology", "Science"))
-st.write(" ")
-st.selectbox("Which department are you in?", ("Electrical/TIE", "Mechanical", "Civil"))
-st.write(" ")
-st.selectbox("What programme do you take?", ("BSc. TIE", "BSc. EEE", "BEd. EEE"))
-st.write(" ")
-st.selectbox("What's ur unit of interest?", ("Radio Frequency Circuits.", "Machine Learning.", "Digital Communication."))
+#-------------------------------------------------- VARIABLES ----------------------------------------------------------
 
 # SESSION STATES.
 
@@ -58,72 +50,109 @@ if ("assignment_1_score", "assignment_2_score", "assignment_3_score", "cat_1_sco
     st.session_state["total_score"] = 0
 
 
-if task == "Estimate my score.":
+#-------------------------------------------- UDFs ---------------------------------------------------------------------
 
-    input_expander_label = "Enter your assessment estimates/actual scores."
-    assignment_1_label = "Enter/Estimate your Assignment 1's score as a percentage:"
-    assignment_2_label = "Enter/Estimate your Assignment 2's score as a percentage:"
-    assignment_3_label = "Enter/Estimate your Assignment 3's score as a percentage:"
-    cat_1_label = "Enter/Estimate your CAT 1's percentage score:"
-    cat_2_label = "Enter/Estimate your CAT 2's percentage score:"
-    cat_3_label = "Enter/Estimate your CAT 3's percentage score:"
-    lab_1_label = "Enter/Estimate your Lab 1's percentage score:"
-    lab_2_label = "Enter/Estimate your Lab 2's percentage score:"
-    lab_3_label = "Enter/Estimate your Lab 3's percentage score:"
-    project_label = "Enter/Estimate your Unit Project's percentage score:"
-    exam_label = "Enter/Estimate your Exam score as is e.g. out of 70:"
+def labels():  # LABELS.
 
-else:
+    global entry, input_expander_label, assignment_1_label, assignment_2_label, assignment_3_label, cat_1_label, cat_2_label, cat_3_label, lab_1_label, lab_2_label, lab_3_label, project_label, exam_label
 
-    input_expander_label = "Enter your assessment targets."
-    assignment_1_label = "Set a target score for Assignment 1 as a percentage:"
-    assignment_2_label = "Set a target score for Assignment 2 as a percentage:"
-    assignment_3_label = "Set a target score for Assignment 3 as a percentage:"
-    cat_1_label = "Set a target score for CAT 1 as a percentage:"
-    cat_2_label = "Set a target score for CAT 2 as a percentage:"
-    cat_3_label = "Set a target score for CAT 3 as a percentage:"
-    lab_1_label = "Set a target score for Lab 1 as a percentage:"
-    lab_2_label = "Set a target score for Lab 2 as a percentage:"
-    lab_3_label = "Set a target score for Lab 3 as a percentage:"
-    project_label = "Set a target score for the Unit Project as a percentage:"
-    exam_label = "Set a target score for the Exam as is i.e. out of 70:"
+    if task == "Estimate my score.":
+
+        input_expander_label = "Enter your assessment estimates/actual scores."
+        assignment_1_label = "Enter/Estimate your Assignment 1's score as a percentage:"
+        assignment_2_label = "Enter/Estimate your Assignment 2's score as a percentage:"
+        assignment_3_label = "Enter/Estimate your Assignment 3's score as a percentage:"
+        cat_1_label = "Enter/Estimate your CAT 1's percentage score:"
+        cat_2_label = "Enter/Estimate your CAT 2's percentage score:"
+        cat_3_label = "Enter/Estimate your CAT 3's percentage score:"
+        lab_1_label = "Enter/Estimate your Lab 1's percentage score:"
+        lab_2_label = "Enter/Estimate your Lab 2's percentage score:"
+        lab_3_label = "Enter/Estimate your Lab 3's percentage score:"
+        project_label = "Enter/Estimate your Unit Project's percentage score:"
+        exam_label = "Enter/Estimate your Exam score as is e.g. out of 70:"
+
+    else:
+
+        input_expander_label = "Enter your assessment targets."
+        assignment_1_label = "Set a target score for Assignment 1 as a percentage:"
+        assignment_2_label = "Set a target score for Assignment 2 as a percentage:"
+        assignment_3_label = "Set a target score for Assignment 3 as a percentage:"
+        cat_1_label = "Set a target score for CAT 1 as a percentage:"
+        cat_2_label = "Set a target score for CAT 2 as a percentage:"
+        cat_3_label = "Set a target score for CAT 3 as a percentage:"
+        lab_1_label = "Set a target score for Lab 1 as a percentage:"
+        lab_2_label = "Set a target score for Lab 2 as a percentage:"
+        lab_3_label = "Set a target score for Lab 3 as a percentage:"
+        project_label = "Set a target score for the Unit Project as a percentage:"
+        exam_label = "Set a target score for the Exam as is i.e. out of 70:"
+
+    entry = st.expander(label=input_expander_label, expanded=True)
+
+    return entry, input_expander_label, assignment_1_label, assignment_2_label, assignment_3_label, cat_1_label, cat_2_label, cat_3_label, lab_1_label, lab_2_label, lab_3_label, project_label, exam_label
 
 
-input = st.expander(label=input_expander_label, expanded=True)
+def prac_inclusive():
 
-input.info("Enter scores as a percentage apart from the examination score e.g. if an assignment was marked out of 10 and you scored/think you will score/target to score 7 marks, drag the slider in red to 70.")
-st.session_state.assignment_1_score = input.slider(label=assignment_1_label, min_value=0, max_value=100, step=1, value=0)
-st.session_state.assignment_2_score = input.slider(label=assignment_2_label, min_value=0, max_value=100, step=1, value=0)
-st.session_state.assignment_3_score = input.slider(label=assignment_3_label, min_value=0, max_value=100, step=1, value=0)
+    entry.info("Enter scores as a percentage apart from the examination score e.g. if an assignment was marked out of 10 and you scored/think you will score/target to score 7 marks, drag the slider in red to 70.")
+    st.session_state.assignment_1_score = entry.slider(label=assignment_1_label, min_value=0, max_value=100, step=1, value=0)
+    st.session_state.assignment_2_score = entry.slider(label=assignment_2_label, min_value=0, max_value=100, step=1, value=0)
+    st.session_state.assignment_3_score = entry.slider(label=assignment_3_label, min_value=0, max_value=100, step=1, value=0)
 
-input.info("If a given assessment was never administered, kindly don't slide the bar pertaining to that assessment.")
+    entry.info("If a given assessment was never administered, kindly don't slide the bar pertaining to that assessment.")
 
-st.session_state.cat_1_score = input.slider(label=cat_1_label, min_value=0, max_value=100, step=1, value=0)
-st.session_state.cat_2_score = input.slider(label=cat_2_label, min_value=0, max_value=100, step=1, value=0)
-st.session_state.cat_3_score = input.slider(label=cat_3_label, min_value=0, max_value=100, step=1, value=0)
+    st.session_state.cat_1_score = entry.slider(label=cat_1_label, min_value=0, max_value=100, step=1, value=0)
+    st.session_state.cat_2_score = entry.slider(label=cat_2_label, min_value=0, max_value=100, step=1, value=0)
+    st.session_state.cat_3_score = entry.slider(label=cat_3_label, min_value=0, max_value=100, step=1, value=0)
 
-st.session_state.lab_1_score = input.slider(label=lab_1_label, min_value=0, max_value=100, step=1, value=0, key="lab_1")
-st.session_state.lab_2_score = input.slider(label=lab_2_label, min_value=0, max_value=100, step=1, value=0)
-st.session_state.lab_3_score = input.slider(label=lab_3_label, min_value=0, max_value=100, step=1, value=0)
+    st.session_state.lab_1_score = entry.slider(label=lab_1_label, min_value=0, max_value=100, step=1, value=0, key="lab_1")
+    st.session_state.lab_2_score = entry.slider(label=lab_2_label, min_value=0, max_value=100, step=1, value=0)
+    st.session_state.lab_3_score = entry.slider(label=lab_3_label, min_value=0, max_value=100, step=1, value=0)
 
-st.session_state.project_score = input.slider(label=project_label, min_value=0, max_value=100, step=1, value=0, disabled=st.session_state.lab_1, help="A lab and unit project are not administered together, drag the lab scores to 0 to enter project score(when project score is entered any lab marks will be ignored during calculation, the vice versa is TRUE). More about the Unit Project... some units do not have lab sessions, to ensure practical skills, a unit project is administered. It is also marked out of 15. ")
+    st.session_state.project_score = entry.slider(label=project_label, min_value=0, max_value=100, step=1, value=0, disabled=st.session_state.lab_1, help="A lab and unit project are not administered together, drag the lab scores to 0 to enter project score(when project score is entered any lab marks will be ignored during calculation, the vice versa is TRUE). More about the Unit Project... some units do not have lab sessions, to ensure practical skills, a unit project is administered. It is also marked out of 15. ")
 
-st.session_state.exam_score = input.slider(label=exam_label, min_value=0, max_value=70, step=1, value=0)
+    st.session_state.exam_score = entry.slider(label=exam_label, min_value=0, max_value=70, step=1, value=0)
 
-st.session_state.assignment_score = ((st.session_state.assignment_1_score + st.session_state.assignment_2_score + st.session_state.assignment_3_score)/3) * 0.05
-st.session_state.cat_score = ((st.session_state.cat_1_score + st.session_state.cat_2_score + st.session_state.cat_3_score)/3) * 0.1
+    st.session_state.assignment_score = ((st.session_state.assignment_1_score + st.session_state.assignment_2_score + st.session_state.assignment_3_score)/3) * 0.05
+    st.session_state.cat_score = ((st.session_state.cat_1_score + st.session_state.cat_2_score + st.session_state.cat_3_score)/3) * 0.1
 
-if st.session_state.lab_1:
+    if st.session_state.lab_1:
 
-    st.session_state.prac_score = ((st.session_state.lab_1_score + st.session_state.lab_2_score + st.session_state.lab_3_score) / 3) * 0.15
+        st.session_state.prac_score = ((st.session_state.lab_1_score + st.session_state.lab_2_score + st.session_state.lab_3_score) / 3) * 0.15
 
-else:
+    else:
 
-    st.session_state.prac_score = st.session_state.project_score * 0.15
+        st.session_state.prac_score = st.session_state.project_score * 0.15
 
-st.session_state.total_score = st.session_state.assignment_score + st.session_state.cat_score + st.session_state.prac_score + st.session_state.exam_score
+    st.session_state.total_score = st.session_state.assignment_score + st.session_state.cat_score + st.session_state.prac_score + st.session_state.exam_score
 
-#                 *--------------  GRADING --------------------------------------------*
+    return st.session_state.total_score
+
+def prac_exclusive():
+
+    entry.info("Enter scores as a percentage apart from the examination score e.g. if an assignment was marked out of 10 and you scored/think you will score/target to score 7 marks, drag the slider in red to 70.")
+
+    st.session_state.assignment_1_score = entry.slider(label=assignment_1_label, min_value=0, max_value=100, step=1,
+                                                       value=0)
+    st.session_state.assignment_2_score = entry.slider(label=assignment_2_label, min_value=0, max_value=100, step=1,
+                                                       value=0)
+    st.session_state.assignment_3_score = entry.slider(label=assignment_3_label, min_value=0, max_value=100, step=1,
+                                                       value=0)
+
+    entry.info(
+        "If a given assessment was never administered, kindly don't slide the bar pertaining to that assessment.")
+
+    st.session_state.cat_1_score = entry.slider(label=cat_1_label, min_value=0, max_value=100, step=1, value=0)
+    st.session_state.cat_2_score = entry.slider(label=cat_2_label, min_value=0, max_value=100, step=1, value=0)
+    st.session_state.cat_3_score = entry.slider(label=cat_3_label, min_value=0, max_value=100, step=1, value=0)
+
+    st.session_state.exam_score = entry.slider(label=exam_label, min_value=0, max_value=70, step=1, value=0)
+
+    st.session_state.assignment_score = ((st.session_state.assignment_1_score + st.session_state.assignment_2_score + st.session_state.assignment_3_score) / 3) * 0.1
+    st.session_state.cat_score = ((st.session_state.cat_1_score + st.session_state.cat_2_score + st.session_state.cat_3_score) / 3) * 0.2
+
+    st.session_state.total_score = st.session_state.assignment_score + st.session_state.cat_score + st.session_state.exam_score
+
+    return st.session_state.total_score
 
 def grade():
 
@@ -149,6 +178,51 @@ def grade():
 
     else:
         pass
+
+
+#-------------------------------------------------- APPLICATION --------------------------------------------------------
+
+task = st.selectbox("What do you wanna do?", ("Estimate my score.", "Set target(s)."))
+st.write(" ")
+
+unit = st.selectbox("What's ur unit of interest?", ("Radio Frequency Circuits", "Machine Learning", "Digital Communication", "Calculus I", "Calculus II", "Calculus III"))
+st.write(" ")
+st.write(" ")
+st.write(" ")
+
+prac_exclusive_units = ["Calculus I", "Calculus II", "Calculus III"]
+prac_inclusive_units = ["Radio Frequency Circuits", "Machine Learning", "Digital Communication"]
+
+find_exc = 0
+find_inc = 0
+
+while True:
+
+    if find_exc >= len(prac_exclusive_units):
+        break
+
+    else:
+        if unit == prac_exclusive_units[find_exc]:
+
+            labels()
+            prac_exclusive()
+            break
+
+        find_exc += 1
+
+while True:
+
+    if find_inc >= len(prac_inclusive_units):
+        break
+
+    else:
+        if unit == prac_inclusive_units[find_inc]:
+            labels()
+            prac_inclusive()
+            break
+
+        find_inc += 1
+
 
 
 if task == "Estimate my score.":
