@@ -1,10 +1,11 @@
 import streamlit as st
 from PIL import Image
 from pathlib import Path
+import json
 
 # STREAMLIT PAGE CONFIG.
 
-st.set_page_config(page_title='kimathi-grading', page_icon='🎓', layout="centered", initial_sidebar_state="collapsed")
+st.set_page_config(page_title='dkut-grading', page_icon='🎓', layout="centered", initial_sidebar_state="collapsed")
 
 hide_streamlit_style = """ 
             <style>
@@ -23,17 +24,18 @@ with open(css_file) as f:
 
 # LOGO.
 
-logo = current_dir / "assets" / "logo.jpg"
+logo = current_dir / "assets" / "dkut-grading.jpeg"
 logo = Image.open(logo)
 
 st.header("kimathi-grading.")
 st.image(logo, use_column_width=True)
 
-#-------------------------------------------------- VARIABLES ----------------------------------------------------------
+# -------------------------------------------------- VARIABLES ----------------------------------------------------------
 
 # SESSION STATES.
 
-if ("assignment_1_score", "assignment_2_score", "assignment_3_score", "cat_1_score", "cat_2_score", "cat_3_score", "lab_1_score", "lab_2_score","lab_3_score", "exam_score") not in st.session_state:
+if ("assignment_1_score", "assignment_2_score", "assignment_3_score", "cat_1_score", "cat_2_score", "cat_3_score",
+    "lab_1_score", "lab_2_score", "lab_3_score", "exam_score") not in st.session_state:
     st.session_state["assignment_1_score"] = 0
     st.session_state["assignment_2_score"] = 0
     st.session_state["assignment_3_score"] = 0
@@ -50,13 +52,13 @@ if ("assignment_1_score", "assignment_2_score", "assignment_3_score", "cat_1_sco
     st.session_state["total_score"] = 0
 
 
-#-------------------------------------------- UDFs ---------------------------------------------------------------------
+# -------------------------------------------- UDFs ---------------------------------------------------------------------
 
 def labels():  # LABELS.
 
     global entry, input_expander_label, assignment_1_label, assignment_2_label, assignment_3_label, cat_1_label, cat_2_label, cat_3_label, lab_1_label, lab_2_label, lab_3_label, project_label, exam_label
 
-    if task == "Estimate my score.":
+    if task == "Estimate my score":
 
         input_expander_label = "Enter your assessment estimates/actual scores."
         assignment_1_label = "Enter/Estimate your Assignment 1's score as a percentage:"
@@ -92,32 +94,42 @@ def labels():  # LABELS.
 
 
 def prac_inclusive():
+    entry.info(
+        "Enter scores as a percentage apart from the examination score e.g. if an assignment was marked out of 10 and you scored, think you will score or target to score 7 marks, drag the slider in red to 70.")
+    st.session_state.assignment_1_score = entry.slider(label=assignment_1_label, min_value=0, max_value=100, step=1,
+                                                       value=0)
+    st.session_state.assignment_2_score = entry.slider(label=assignment_2_label, min_value=0, max_value=100, step=1,
+                                                       value=0)
+    st.session_state.assignment_3_score = entry.slider(label=assignment_3_label, min_value=0, max_value=100, step=1,
+                                                       value=0)
 
-    entry.info("Enter scores as a percentage apart from the examination score e.g. if an assignment was marked out of 10 and you scored/think you will score/target to score 7 marks, drag the slider in red to 70.")
-    st.session_state.assignment_1_score = entry.slider(label=assignment_1_label, min_value=0, max_value=100, step=1, value=0)
-    st.session_state.assignment_2_score = entry.slider(label=assignment_2_label, min_value=0, max_value=100, step=1, value=0)
-    st.session_state.assignment_3_score = entry.slider(label=assignment_3_label, min_value=0, max_value=100, step=1, value=0)
-
-    entry.info("If a given assessment was never administered, kindly don't slide the bar pertaining to that assessment.")
+    entry.info(
+        "If a given assessment was never administered, kindly don't slide the bar pertaining to that assessment.")
 
     st.session_state.cat_1_score = entry.slider(label=cat_1_label, min_value=0, max_value=100, step=1, value=0)
     st.session_state.cat_2_score = entry.slider(label=cat_2_label, min_value=0, max_value=100, step=1, value=0)
     st.session_state.cat_3_score = entry.slider(label=cat_3_label, min_value=0, max_value=100, step=1, value=0)
 
-    st.session_state.lab_1_score = entry.slider(label=lab_1_label, min_value=0, max_value=100, step=1, value=0, key="lab_1")
+    st.session_state.lab_1_score = entry.slider(label=lab_1_label, min_value=0, max_value=100, step=1, value=0,
+                                                key="lab_1")
     st.session_state.lab_2_score = entry.slider(label=lab_2_label, min_value=0, max_value=100, step=1, value=0)
     st.session_state.lab_3_score = entry.slider(label=lab_3_label, min_value=0, max_value=100, step=1, value=0)
 
-    st.session_state.project_score = entry.slider(label=project_label, min_value=0, max_value=100, step=1, value=0, disabled=st.session_state.lab_1, help="A lab and unit project are not administered together, drag the lab scores to 0 to enter project score(when project score is entered any lab marks will be ignored during calculation, the vice versa is TRUE). More about the Unit Project... some units do not have lab sessions, to ensure practical skills, a unit project is administered. It is also marked out of 15. ")
+    st.session_state.project_score = entry.slider(label=project_label, min_value=0, max_value=100, step=1, value=0,
+                                                  disabled=st.session_state.lab_1,
+                                                  help="A lab and unit project are not administered together, drag the lab scores to 0 to enter project score(when project score is entered any lab marks will be ignored during calculation, the vice versa is TRUE). More about the Unit Project... some units do not have lab sessions, to ensure practical skills, a unit project is administered. It is also marked out of 15. ")
 
     st.session_state.exam_score = entry.slider(label=exam_label, min_value=0, max_value=70, step=1, value=0)
 
-    st.session_state.assignment_score = ((st.session_state.assignment_1_score + st.session_state.assignment_2_score + st.session_state.assignment_3_score)/3) * 0.05
-    st.session_state.cat_score = ((st.session_state.cat_1_score + st.session_state.cat_2_score + st.session_state.cat_3_score)/3) * 0.1
+    st.session_state.assignment_score = ((
+                                                     st.session_state.assignment_1_score + st.session_state.assignment_2_score + st.session_state.assignment_3_score) / 3) * 0.05
+    st.session_state.cat_score = ((
+                                              st.session_state.cat_1_score + st.session_state.cat_2_score + st.session_state.cat_3_score) / 3) * 0.1
 
     if st.session_state.lab_1:
 
-        st.session_state.prac_score = ((st.session_state.lab_1_score + st.session_state.lab_2_score + st.session_state.lab_3_score) / 3) * 0.15
+        st.session_state.prac_score = ((
+                                                   st.session_state.lab_1_score + st.session_state.lab_2_score + st.session_state.lab_3_score) / 3) * 0.15
 
     else:
 
@@ -127,9 +139,10 @@ def prac_inclusive():
 
     return st.session_state.total_score
 
-def prac_exclusive():
 
-    entry.info("Enter scores as a percentage apart from the examination score e.g. if an assignment was marked out of 10 and you scored/think you will score/target to score 7 marks, drag the slider in red to 70.")
+def prac_exclusive():
+    entry.info(
+        "Enter scores as a percentage apart from the examination score e.g. if an assignment was marked out of 10 and you scored, think you will score or target to score 7 marks, drag the slider in red to 70.")
 
     st.session_state.assignment_1_score = entry.slider(label=assignment_1_label, min_value=0, max_value=100, step=1,
                                                        value=0)
@@ -147,15 +160,17 @@ def prac_exclusive():
 
     st.session_state.exam_score = entry.slider(label=exam_label, min_value=0, max_value=70, step=1, value=0)
 
-    st.session_state.assignment_score = ((st.session_state.assignment_1_score + st.session_state.assignment_2_score + st.session_state.assignment_3_score) / 3) * 0.1
-    st.session_state.cat_score = ((st.session_state.cat_1_score + st.session_state.cat_2_score + st.session_state.cat_3_score) / 3) * 0.2
+    st.session_state.assignment_score = ((
+                                                     st.session_state.assignment_1_score + st.session_state.assignment_2_score + st.session_state.assignment_3_score) / 3) * 0.1
+    st.session_state.cat_score = ((
+                                              st.session_state.cat_1_score + st.session_state.cat_2_score + st.session_state.cat_3_score) / 3) * 0.2
 
     st.session_state.total_score = st.session_state.assignment_score + st.session_state.cat_score + st.session_state.exam_score
 
     return st.session_state.total_score
 
-def grade():
 
+def grade():
     if 70 <= st.session_state.total_score <= 100:  # 70 -100
 
         return "That's an A."
@@ -180,18 +195,98 @@ def grade():
         pass
 
 
+
+def programme():
+
+    global prac_inclusive_units, prac_exclusive_units, all_units
+
+    program_finder_from_reg()
+
+    if program == "":
+
+        prac_inclusive_units = ""
+        prac_exclusive_units = ""
+        all_units = ""
+
+    else:
+
+        with open("programme_units.json") as db:
+
+            programs = json.load(db)  # convert the json object to a Python dic.
+
+        for key in programs:
+            if key == program:
+                prac_inclusive_units = programs[key][0]
+                prac_exclusive_units = programs[key][1]
+
+        all_units = []
+        all_units.extend(prac_inclusive_units)
+        all_units.extend(prac_exclusive_units)
+        all_units.sort()
+
+    return prac_inclusive_units, prac_exclusive_units, all_units
+
+
 #-------------------------------------------------- APPLICATION --------------------------------------------------------
 
-task = st.selectbox("What do you wanna do?", ("Estimate my score.", "Set target(s)."))
+task = st.selectbox("I want to", ("Estimate a score for a given unit", "Set a target for a given unit"))
 st.write(" ")
 
-unit = st.selectbox("What's ur unit of interest?", ("Radio Frequency Circuits", "Machine Learning", "Digital Communication", "Calculus I", "Calculus II", "Calculus III"))
-st.write(" ")
-st.write(" ")
-st.write(" ")
+reg_no = st.text_input(label="Enter ur registration number, correctly.", placeholder="X000-00-0000/0000", help="The only info of interest is the programme code. It is not a bug when you don't have to enter your registration number in full in order to select a unit.")
 
-prac_exclusive_units = ["Calculus I", "Calculus II", "Calculus III"]
-prac_inclusive_units = ["Radio Frequency Circuits", "Machine Learning", "Digital Communication"]
+def reg_no_programme_extractor():
+
+    global reg_programme
+
+    if reg_no == "":  # cater for error raised when no input is given to the reg no text input widget.
+
+        reg_programme = ""
+
+    else:
+        reg_list = []
+
+        for item in reg_no:
+            reg_list.append(item)
+        
+        if len(reg_list) < 4:  # cater for invalid programme entered.
+            reg_programme = "invalid"
+
+        if len(reg_list) >= 4:
+            reg_programme = reg_list[1:4]
+
+    return reg_programme
+
+def program_finder_from_reg(): # avail units based on info from reg no.
+
+    global program
+
+    reg_no_programme_extractor()
+
+    if reg_programme == "":
+
+        programme_from_reg_no = ""
+
+    else:
+
+        programme_from_reg_no = reg_programme[0] + reg_programme[1] + reg_programme[2]
+
+    with open("programme_codes.json", "r") as codes:
+
+        programme_codes = json.load(codes)
+
+    for key in programme_codes:
+        if key == programme_from_reg_no:
+            program = programme_codes[key]
+            break
+        else:
+            program = ""
+
+    return program
+
+unit = st.selectbox("What's ur unit of interest?", programme()[2], help="A valid registration number is required to avail units for each programme.")
+st.write(" ")
+st.write(" ")
+st.write(" ")
 
 find_exc = 0
 find_inc = 0
@@ -203,7 +298,6 @@ while True:
 
     else:
         if unit == prac_exclusive_units[find_exc]:
-
             labels()
             prac_exclusive()
             break
@@ -223,17 +317,26 @@ while True:
 
         find_inc += 1
 
+if task == "Estimate my score":
+    if unit != None:
 
-
-if task == "Estimate my score.":
-
-    st.success("Your total estimated score for that unit is: " + str(round(st.session_state.total_score, 1)) + " %. " + str(grade()))
+        st.success(
+            "Your total estimated score for the unit, " + unit + ", is: " + str(round(st.session_state.total_score, 1)) + " %. " + str(
+                grade()))
+    else:
+        pass
 
 else:
 
-    st.success("Your target score for that unit is: " + str(round(st.session_state.total_score, 1)) + " %. " + str(grade()))
+    if unit != None:
+        st.success(
+            "Your target score for the unit, " + unit + ", is: " + str(round(st.session_state.total_score, 1)) + " %. " + str(grade()))
+
+    else:
+        pass
+
 
 st.write(" ")
 st.write(" ")
 st.write(" ")
-st.write("© kimathi-grading 2024.")
+st.write("© dkut-grading 2024.")
