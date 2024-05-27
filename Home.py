@@ -27,7 +27,7 @@ with open(css_file) as f:
 logo = current_dir / "assets" / "dkut-grading_logo.png"
 logo = Image.open(logo)
 
-st.header("kimathi-grading.")
+st.header("dkut-grading.")
 st.image(logo, use_column_width=True)
 
 # -------------------------------------------------- VARIABLES ----------------------------------------------------------
