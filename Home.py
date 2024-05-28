@@ -341,7 +341,7 @@ else:
 st.write(" ")
 st.write(" ")
 st.info("You can also use this site to set targets or estimate scores for units undertaken in a specific semester or academic year. To do so, you will have to use the calculator above to get the total scores for each unit in a semester/year, add them and then divide by the number of units to get the mean score and grade for a given semester/year.")
-st.error("	Follow me on Instagram; @coder_klein: https://www.instagram.com/coder_klein/")
+st.error("Follow me on Instagram; @coder_klein: https://www.instagram.com/coder_klein/. Feel free to DM me on IG or WhatsApp/SMS/☎️ 0758 153003 for suggestions and reviews.")
 st.subheader("Other websites by me:")
 logo = current_dir / "assets" / "qwishi_logo.png"
 logo = Image.open(logo)
