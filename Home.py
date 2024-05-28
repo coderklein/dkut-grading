@@ -31,7 +31,7 @@ st.header("dkut-grading.")
 st.image(logo, use_column_width=True)
 
 st.info("Built to help u excel in your academics.")
-st.warning("Currently serving BSc. TIE students, other programmes coming soon!! You don't have to be a TIE student to try it; enter E020, pick Calculus 1 and play with sliding bars to get a total score.")
+st.warning("Try it!! Enter E020, pick Calculus 1 and play with sliding bars to get a total score. Currently serving BSc. TIE students, other programmes coming soon!!")
 
 # -------------------------------------------------- VARIABLES ----------------------------------------------------------
 
