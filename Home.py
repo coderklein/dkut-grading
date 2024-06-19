@@ -346,10 +346,10 @@ logo = Image.open(logo)
 st.image(logo, use_column_width=True)
 st.write("~ Find urself a hostel, pahali pa kuishi, EASILY and QUICKLY: https://qwishi.streamlit.app/")
 
-logo2 = current_dir / "assets" / "Nadrah_logo.png"
+logo2 = current_dir / "assets" / "Nadrah_logo.jpg"
 logo2 = Image.open(logo2)
 st.image(logo2, use_column_width=True)
-st.write("~ Your One-Stop Site for QUALITY and AFFORDABLE products/services.")
+st.write("~ Your One-Stop Site for QUALITY and AFFORDABLE products/services: https://nadrah.streamlit.app/")
 
 st.write(" ")
 st.write(" ")
