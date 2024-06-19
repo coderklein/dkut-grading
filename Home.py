@@ -31,7 +31,7 @@ st.header("dkut-grading.")
 st.image(logo, use_column_width=True)
 
 st.info("Built to help you excel in your academics.")
-st.warning("Try it! Select estimate score/set target, enter E020-01-9999/2020, pick Calculus 1 and play with sliding bars to get a total score. Currently serving BSc. TIE students, other programmes coming soon!!")
+st.warning("Try it! Select estimate score/set target, enter E020-01-9999/2020, pick Calculus 1 and play with sliding bars to get a total score. Currently serving TIE students...")
 
 # -------------------------------------------------- VARIABLES ----------------------------------------------------------
 
@@ -339,14 +339,17 @@ else:
         pass
 
 
-st.error("Follow me on Instagram; @coder_klein: https://www.instagram.com/coder_klein/. Feel free to DM me on IG or WhatsApp/SMS/☎️ 0758 153003 for suggestions and reviews.")
+st.error("Instagram: @coder_klein: https://www.instagram.com/coder_klein/ ")
 st.subheader("Other websites by me:")
 logo = current_dir / "assets" / "qwishi_logo.png"
 logo = Image.open(logo)
 st.image(logo, use_column_width=True)
-st.write("~ Find urself a hostel, pahali pa kuishi, EASILY and QUICKLY: https://qwishi.streamlit.app/. More hostels coming soon!!")
+st.write("~ Find urself a hostel, pahali pa kuishi, EASILY and QUICKLY: https://qwishi.streamlit.app/")
 
-st.info("You can also use this site to set targets or estimate scores for units undertaken in a specific semester or academic year. To do so, you will have to use the calculator above to get the total scores for each unit in a semester/year, add them and then divide by the number of units to get the mean score and grade for a given semester/year.")
+logo2 = current_dir / "assets" / "Nadrah_logo.png"
+logo2 = Image.open(logo2)
+st.image(logo2, use_column_width=True)
+st.write("~ Your One-Stop Site for QUALITY and AFFORDABLE products/services.")
 
 st.write(" ")
 st.write(" ")
